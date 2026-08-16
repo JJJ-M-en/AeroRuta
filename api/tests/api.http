@@ -1,0 +1,157 @@
+### AeroRuta API — pruebas manuales
+### Requiere la extensión "REST Client" de VS Code (Huachao Mao).
+### Con el servidor corriendo (npm start), abre este archivo y haz
+### clic en "Send Request" arriba de cada bloque, en orden.
+
+@base = http://localhost:3000/api
+
+### Info general de la API
+GET {{base}}
+
+### =====================================================
+### MÓDULO: PRODUCTOS (vuelos) — lectura pública
+### =====================================================
+
+### Listar todos los vuelos
+GET {{base}}/productos
+
+### Filtrar por origen, destino y tipo, ordenado por precio
+GET {{base}}/productos?origen=bogota&destino=cartagena&tipo=nacional&orden=asc
+
+### Consultar un vuelo puntual
+GET {{base}}/productos/1
+
+
+### =====================================================
+### MÓDULO: AUTENTICACIÓN (JWT)
+### =====================================================
+
+### Iniciar sesión con el usuario sembrado por db/seed.js
+# @name login
+POST {{base}}/autenticacion/login
+Content-Type: application/json
+
+{
+  "correo": "piloto@aeroruta.com",
+  "clave": "AeroRuta2026"
+}
+
+### Validar el token recibido arriba
+GET {{base}}/autenticacion/sesion
+Authorization: Bearer {{login.response.body.token}}
+
+### Cambiar la contraseña
+PUT {{base}}/autenticacion/clave
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "claveActual": "AeroRuta2026",
+  "claveNueva": "NuevaClave2026"
+}
+
+### Cerrar sesión (revoca el token)
+DELETE {{base}}/autenticacion/sesion
+Authorization: Bearer {{login.response.body.token}}
+
+
+### =====================================================
+### MÓDULO: PRODUCTOS — creación/edición (requiere sesión)
+### =====================================================
+
+### Crear un vuelo nuevo
+POST {{base}}/productos
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "codigo": "AR999",
+  "origen": "Bogotá (BOG)",
+  "destino": "Barranquilla (BAQ)",
+  "tipo": "nacional",
+  "puerta": "A9",
+  "hora": "16:30",
+  "estado": "atiempo",
+  "precio": 195000
+}
+
+### Actualizar el estado de un vuelo
+PUT {{base}}/productos/1
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "estado": "retrasado"
+}
+
+### Eliminar un vuelo
+DELETE {{base}}/productos/1
+Authorization: Bearer {{login.response.body.token}}
+
+
+### =====================================================
+### MÓDULO: USUARIOS
+### =====================================================
+
+### Crear un usuario (no requiere sesión, es registro)
+# @name registro
+POST {{base}}/usuarios
+Content-Type: application/json
+
+{
+  "correo": "prueba@aeroruta.com",
+  "clave": "ClaveSegura123"
+}
+
+### Listar usuarios (requiere sesión)
+GET {{base}}/usuarios
+Authorization: Bearer {{login.response.body.token}}
+
+### Actualizar mi propio correo
+PUT {{base}}/usuarios/{{login.response.body.usuario.id}}
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "correo": "piloto-actualizado@aeroruta.com"
+}
+
+
+### =====================================================
+### MÓDULO: SERVICIOS (reservas) — todo requiere sesión
+### =====================================================
+
+### Crear una reserva (usa un vuelo_id que exista, ver GET /productos)
+# @name nuevaReserva
+POST {{base}}/servicios
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "vueloId": 2,
+  "clase": "economica",
+  "nombrePasajero": "Janer Figueroa",
+  "fechaViaje": "2026-09-01",
+  "cantidadPasajeros": 2
+}
+
+### Listar mis reservas activas
+GET {{base}}/servicios?estado=activas
+Authorization: Bearer {{login.response.body.token}}
+
+### Cambiar la reserva a clase ejecutiva
+PUT {{base}}/servicios/{{nuevaReserva.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+  "clase": "ejecutiva"
+}
+
+### Cancelar esa reserva puntual
+DELETE {{base}}/servicios/{{nuevaReserva.response.body.id}}
+Authorization: Bearer {{login.response.body.token}}
+
+### Cancelar todas mis reservas activas
+DELETE {{base}}/servicios
+Authorization: Bearer {{login.response.body.token}}

@@ -1,0 +1,649 @@
+/* =====================================================
+   AeroRuta — Hoja de estilos principal
+   Identidad visual: tablero de salidas de aeropuerto
+   ===================================================== */
+
+:root {
+  --navy: #0B1D3A;
+  --navy-light: #142A52;
+  --navy-lighter: #1D3766;
+  --amber: #F5B700;
+  --teal: #2C7873;
+  --off-white: #F2F0E9;
+  --alert: #E4572E;
+  --font-display: 'Space Mono', monospace;
+  --font-body: 'Inter', sans-serif;
+  --radius: 6px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--navy);
+  color: var(--off-white);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+a {
+  color: var(--amber);
+}
+
+/* Enfoque de teclado visible en toda la app (accesibilidad) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+.btn:focus-visible,
+.nav-link:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------- Navbar ---------- */
+.navbar-aero {
+  background-color: var(--navy);
+  border-bottom: 1px solid var(--navy-lighter);
+}
+
+.navbar-brand-aero {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--off-white) !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-brand-aero img {
+  width: 28px;
+  height: 28px;
+  color: var(--amber);
+}
+
+.navbar-aero .nav-link {
+  color: var(--off-white) !important;
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  padding: 0.6rem 1rem !important;
+  border-bottom: 2px solid transparent;
+}
+
+.navbar-aero .nav-link:hover {
+  color: var(--amber) !important;
+}
+
+.navbar-aero .nav-link.active {
+  color: var(--amber) !important;
+  border-bottom: 2px solid var(--amber);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 4.5rem 0 3rem;
+  background-image: url('../img/rutas.svg');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 55%;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-display);
+  color: var(--teal);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.8rem;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.1;
+  margin: 0.75rem 0 1rem;
+}
+
+.hero h1 span {
+  color: var(--amber);
+}
+
+.hero p.lead {
+  color: #C9CADB;
+  max-width: 34rem;
+}
+
+/* Buscador */
+.search-card {
+  background-color: var(--navy-light);
+  border: 1px solid var(--navy-lighter);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.search-card label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #A9ADC7;
+}
+
+.form-control-aero,
+.form-select-aero {
+  background-color: var(--navy);
+  border: 1px solid var(--navy-lighter);
+  color: var(--off-white);
+}
+
+.form-control-aero:focus,
+.form-select-aero:focus {
+  background-color: var(--navy);
+  color: var(--off-white);
+  border-color: var(--amber);
+  box-shadow: 0 0 0 0.2rem rgba(245, 183, 0, 0.25);
+}
+
+.btn-amber {
+  background-color: var(--amber);
+  border-color: var(--amber);
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.btn-amber:hover,
+.btn-amber:focus {
+  background-color: #ffcb2e;
+  border-color: #ffcb2e;
+  color: var(--navy);
+}
+
+.btn-outline-aero {
+  border: 1px solid var(--amber);
+  color: var(--amber);
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+}
+
+.btn-outline-aero:hover {
+  background-color: var(--amber);
+  color: var(--navy);
+}
+
+/* ---------- Tablero de salidas (split-flap) ---------- */
+.board-section {
+  padding: 3rem 0;
+  border-top: 1px solid var(--navy-lighter);
+  border-bottom: 1px solid var(--navy-lighter);
+  background-color: rgba(20, 42, 82, 0.4);
+}
+
+.board-title {
+  font-family: var(--font-display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: var(--teal);
+  margin-bottom: 1rem;
+}
+
+.flap-board {
+  background-color: #081326;
+  border: 1px solid var(--navy-lighter);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.flap-header,
+.flap-row {
+  display: grid;
+  grid-template-columns: 1.1fr 2fr 1fr 1fr 1.2fr;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  align-items: center;
+}
+
+.flap-header {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7C82A6;
+  border-bottom: 1px solid var(--navy-lighter);
+}
+
+.flap-row {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  border-bottom: 1px solid rgba(29, 55, 102, 0.6);
+  opacity: 0;
+  transform: translateY(6px);
+  animation: flap-in 0.45s ease forwards;
+}
+
+.flap-row:last-child {
+  border-bottom: none;
+}
+
+@keyframes flap-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.estado {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.estado-atiempo { background-color: rgba(44, 120, 115, 0.25); color: #5FE0D6; }
+.estado-embarcando { background-color: rgba(245, 183, 0, 0.2); color: var(--amber); }
+.estado-retrasado { background-color: rgba(228, 87, 46, 0.2); color: #FF8B65; }
+
+/* ---------- Destinos ---------- */
+.destinos-section {
+  padding: 3.5rem 0;
+}
+
+.destino-card {
+  background-color: var(--navy-light);
+  border: 1px solid var(--navy-lighter);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  height: 100%;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.destino-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--amber);
+}
+
+.destino-codigo {
+  font-family: var(--font-display);
+  color: var(--amber);
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.destino-ciudad {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--off-white);
+  margin: 0.25rem 0 0.5rem;
+}
+
+.destino-precio {
+  color: #A9ADC7;
+  font-size: 0.9rem;
+}
+
+/* ---------- Footer ---------- */
+.footer-aero {
+  background-color: #081326;
+  border-top: 1px solid var(--navy-lighter);
+  padding: 1.5rem 0;
+  font-size: 0.85rem;
+  color: #7C82A6;
+  text-align: center;
+}
+
+/* ---------- Login ---------- */
+.login-wrapper {
+  min-height: calc(100vh - 140px);
+  display: flex;
+  align-items: center;
+  padding: 3rem 0;
+}
+
+.login-card {
+  background-color: var(--navy-light);
+  border: 1px solid var(--navy-lighter);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  max-width: 26rem;
+  margin: 0 auto;
+}
+
+.login-card h1 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  margin-bottom: 0.35rem;
+}
+
+.login-card p.subtitle {
+  color: #A9ADC7;
+  font-size: 0.9rem;
+  margin-bottom: 1.75rem;
+}
+
+.form-label-aero {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #A9ADC7;
+}
+
+.invalid-feedback-aero {
+  color: #FF8B65;
+  font-size: 0.82rem;
+  margin-top: 0.3rem;
+  display: none;
+}
+
+.is-invalid-aero {
+  border-color: var(--alert) !important;
+}
+
+.is-invalid-aero ~ .invalid-feedback-aero {
+  display: block;
+}
+
+.login-status {
+  margin-top: 1rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  display: none;
+}
+
+.login-status.show {
+  display: block;
+}
+
+.login-status.ok {
+  background-color: rgba(44, 120, 115, 0.25);
+  color: #5FE0D6;
+  border: 1px solid var(--teal);
+}
+
+.login-status.error {
+  background-color: rgba(228, 87, 46, 0.2);
+  color: #FF8B65;
+  border: 1px solid var(--alert);
+}
+
+/* ---------- Vuelos (pantalla principal) ---------- */
+.vuelos-header {
+  padding: 2.5rem 0 1.5rem;
+  border-bottom: 1px solid var(--navy-lighter);
+}
+
+.vuelos-header h1 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+}
+
+.filtros-bar {
+  padding: 1.25rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.filtro-btn {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  background-color: var(--navy-light);
+  border: 1px solid var(--navy-lighter);
+  color: var(--off-white);
+  border-radius: 3px;
+  padding: 0.4rem 0.9rem;
+}
+
+.filtro-btn.active,
+.filtro-btn:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.vuelo-card {
+  background-color: var(--navy-light);
+  border: 1px solid var(--navy-lighter);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.vuelo-ruta {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+}
+
+.vuelo-ruta .codigo {
+  color: var(--amber);
+}
+
+.vuelo-detalle {
+  color: #A9ADC7;
+  font-size: 0.85rem;
+}
+
+.vuelo-precio {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--amber);
+}
+
+.vuelo-precio small {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  color: #7C82A6;
+}
+
+.sin-resultados {
+  text-align: center;
+  font-family: var(--font-display);
+  background-color: rgba(245, 183, 0, 0.12) !important;
+  color: var(--amber) !important;
+  border: 1px solid rgba(245, 183, 0, 0.4) !important;
+  display: none;
+}
+
+.sin-resultados.show {
+  display: block;
+}
+
+/* ---------- Enlace "saltar al contenido" (accesibilidad) ---------- */
+.skip-link {
+  position: absolute;
+  top: -3rem;
+  left: 0.75rem;
+  z-index: 2000;
+  background-color: var(--amber);
+  color: var(--navy);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  padding: 0.6rem 1rem;
+  border-radius: 3px;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+/* ---------- Modal "Mis reservas" ---------- */
+.modal-aero {
+  background-color: var(--navy-light);
+  border: 1px solid var(--navy-lighter);
+  color: var(--off-white);
+}
+
+.modal-aero .modal-header,
+.modal-aero .modal-footer {
+  border-color: var(--navy-lighter);
+}
+
+.modal-aero .modal-title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+.modal-aero .btn-close {
+  filter: invert(1) grayscale(1) brightness(1.8);
+}
+
+.list-reservas {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-reservas li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--navy-lighter);
+  font-size: 0.9rem;
+}
+
+.list-reservas li:last-child {
+  border-bottom: none;
+}
+
+.list-reservas .codigo-reserva {
+  font-family: var(--font-display);
+  color: var(--amber);
+}
+
+.list-reservas .fecha-reserva {
+  color: #7C82A6;
+  font-size: 0.78rem;
+}
+
+.sin-reservas {
+  color: #7C82A6;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 1rem 0;
+  display: none;
+}
+
+.sin-reservas.show {
+  display: block;
+}
+
+.btn-cerrar-sesion {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.resumen-vuelo {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  background-color: var(--navy);
+  border: 1px solid var(--navy-lighter);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 1.25rem;
+}
+
+.resumen-vuelo .codigo {
+  color: var(--amber);
+}
+
+.reservas-badge {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  color: var(--navy);
+  background-color: var(--amber);
+  border: none;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  white-space: nowrap;
+}
+
+.reservas-badge:hover {
+  background-color: #ffcb2e;
+}
+
+#alertaContainer .alert {
+  font-family: var(--font-body);
+  border-radius: var(--radius);
+}
+
+#alertaContainer .alert-success {
+  background-color: rgba(44, 120, 115, 0.2);
+  color: #5FE0D6;
+  border: 1px solid var(--teal);
+}
+
+#alertaContainer .alert-info {
+  background-color: rgba(29, 55, 102, 0.5);
+  color: var(--off-white);
+  border: 1px solid var(--navy-lighter);
+}
+
+#alertaContainer .alert-warning {
+  background-color: rgba(245, 183, 0, 0.12);
+  color: var(--amber);
+  border: 1px solid rgba(245, 183, 0, 0.4);
+}
+
+#alertaContainer .alert-warning a {
+  color: var(--amber);
+  text-decoration: underline;
+}
+
+#alertaContainer .alert-danger {
+  background-color: rgba(228, 87, 46, 0.2);
+  color: #FF8B65;
+  border: 1px solid var(--alert);
+}
+
+#alertaContainer .alert .btn-close {
+  filter: invert(1) grayscale(1) brightness(1.8);
+}
+
+@media (max-width: 767px) {
+  .hero {
+    background-size: 80%;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    padding-top: 2.5rem;
+  }
+  .flap-header,
+  .flap-row {
+    grid-template-columns: 1fr 1.6fr 1fr;
+  }
+  .flap-header span:nth-child(3),
+  .flap-header span:nth-child(4),
+  .flap-row span:nth-child(3),
+  .flap-row span:nth-child(4) {
+    display: none;
+  }
+}
