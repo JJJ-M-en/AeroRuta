@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   marcarEnlaceActivo();
   actualizarNavSesion();
   inicializarTableroSalidas();
+  inicializarBuscadorInicio();
   inicializarLogin();
   inicializarRegistro();
   inicializarVuelos();
@@ -74,10 +75,10 @@ async function apiFetch(ruta, opciones = {}) {
   const encabezados = { "Content-Type": "application/json" };
   if (opciones.auth) {
     const token = localStorage.getItem(LS_KEYS.token);
-    if (token) encabezados["Authorization"] = `Bearer ${token}`;
+    if (token) encabezados["Authorization"] = Bearer ${token};
   }
 
-  const respuesta = await fetch(`${API_BASE_URL}${ruta}`, {
+  const respuesta = await fetch(${API_BASE_URL}${ruta}, {
     ...opciones,
     headers: { ...encabezados, ...(opciones.headers || {}) },
   });
@@ -100,7 +101,7 @@ async function inicializarTableroSalidas() {
     vuelos.slice(0, 6).forEach((vuelo, indice) => {
       const fila = document.createElement("div");
       fila.className = "flap-row";
-      fila.style.animationDelay = `${indice * 0.08}s`;
+      fila.style.animationDelay = ${indice * 0.08}s;
       fila.innerHTML = `
         <span>${vuelo.codigo}</span>
         <span>${vuelo.destino}</span>
@@ -111,7 +112,38 @@ async function inicializarTableroSalidas() {
       tablero.appendChild(fila);
     });
   } catch (error) {
-    tablero.innerHTML = `<p class="flap-row" style="opacity:1;">No se pudo conectar con la API (${error.message}). Verifica que el servidor esté corriendo en ${API_BASE_URL}.</p>`;
+    tablero.innerHTML = <p class="flap-row" style="opacity:1;">No se pudo conectar con la API (${error.message}). Verifica que el servidor esté corriendo en ${API_BASE_URL}.</p>;
+  }
+}
+
+/* =====================================================
+   Pantalla: Inicio — llena Origen/Destino con ciudades reales
+   ===================================================== */
+async function inicializarBuscadorInicio() {
+  const selectOrigen = document.getElementById("origen");
+  const selectDestino = document.getElementById("destino");
+  if (!selectOrigen || !selectDestino) return;
+
+  try {
+    const vuelos = await apiFetch("/productos");
+    const origenes = [...new Set(vuelos.map((v) => v.origen))].sort();
+    const destinos = [...new Set(vuelos.map((v) => v.destino))].sort();
+
+    origenes.forEach((ciudad) => {
+      const opcion = document.createElement("option");
+      opcion.value = ciudad;
+      opcion.textContent = ciudad;
+      selectOrigen.appendChild(opcion);
+    });
+
+    destinos.forEach((ciudad) => {
+      const opcion = document.createElement("option");
+      opcion.value = ciudad;
+      opcion.textContent = ciudad;
+      selectDestino.appendChild(opcion);
+    });
+  } catch (error) {
+    console.error("No se pudieron cargar las ciudades:", error.message);
   }
 }
 
@@ -287,9 +319,9 @@ function inicializarVuelos() {
 
   function mostrarAlerta(mensaje, tipo, autocerrar = true) {
     const alerta = document.createElement("div");
-    alerta.className = `alert alert-${tipo} alert-dismissible fade show`;
+    alerta.className = alert alert-${tipo} alert-dismissible fade show;
     alerta.setAttribute("role", "alert");
-    alerta.innerHTML = `${mensaje}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>`;
+    alerta.innerHTML = ${mensaje}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>;
     contenedorAlertas.prepend(alerta);
     if (autocerrar) {
       setTimeout(() => bootstrap.Alert.getOrCreateInstance(alerta).close(), 5000);
@@ -310,7 +342,7 @@ function inicializarVuelos() {
     try {
       const reservas = await apiFetch("/servicios?estado=activas", { auth: true });
       const total = reservas.length;
-      insigniaReservas.textContent = `${total} reserva${total === 1 ? "" : "s"} activa${total === 1 ? "" : "s"}`;
+      insigniaReservas.textContent = ${total} reserva${total === 1 ? "" : "s"} activa${total === 1 ? "" : "s"};
     } catch {
       insigniaReservas.textContent = "Reservas no disponibles";
     }
@@ -334,10 +366,10 @@ function inicializarVuelos() {
     }
 
     const partes = [];
-    if (origen) partes.push(`desde ${origen}`);
-    if (destino) partes.push(`hacia ${destino}`);
-    if (fecha) partes.push(`el ${fecha}`);
-    mostrarAlerta(`Mostrando vuelos ${partes.join(" ")}. La fecha se usará al confirmar tu reserva.`, "info", false);
+    if (origen) partes.push(desde ${origen});
+    if (destino) partes.push(hacia ${destino});
+    if (fecha) partes.push(el ${fecha});
+    mostrarAlerta(Mostrando vuelos ${partes.join(" ")}. La fecha se usará al confirmar tu reserva., "info", false);
 
     // Prellena la fecha de viaje del checkout con la que buscaron en Inicio
     if (fecha) document.getElementById("pasajeroFecha").value = fecha;
@@ -351,13 +383,13 @@ function inicializarVuelos() {
     if (filtroOrigen) parametros.set("origen", filtroOrigen);
     parametros.set("orden", ordenAscendente ? "asc" : "desc");
 
-    lista.innerHTML = `<p class="vuelo-detalle">Cargando vuelos...</p>`;
+    lista.innerHTML = <p class="vuelo-detalle">Cargando vuelos...</p>;
 
     try {
-      vuelosActuales = await apiFetch(`/productos?${parametros.toString()}`);
+      vuelosActuales = await apiFetch(/productos?${parametros.toString()});
     } catch (error) {
       lista.innerHTML = "";
-      mostrarAlerta(`No se pudo conectar con la API: ${error.message}. Verifica que el servidor esté corriendo en ${API_BASE_URL}.`, "danger", false);
+      mostrarAlerta(No se pudo conectar con la API: ${error.message}. Verifica que el servidor esté corriendo en ${API_BASE_URL}., "danger", false);
       sinResultados.classList.remove("show");
       return;
     }
@@ -399,7 +431,7 @@ function inicializarVuelos() {
 
     vueloSeleccionadoId = vuelo.id;
     document.getElementById("resumenVuelo").innerHTML =
-      `<span class="codigo">${vuelo.codigo}</span> · ${vuelo.origen} → ${vuelo.destino} · $${Number(vuelo.precio).toLocaleString("es-CO")} por pasajero`;
+      <span class="codigo">${vuelo.codigo}</span> · ${vuelo.origen} → ${vuelo.destino} · $${Number(vuelo.precio).toLocaleString("es-CO")} por pasajero;
     modalReservar.show();
   });
 
@@ -424,11 +456,11 @@ function inicializarVuelos() {
       await actualizarInsigniaReservas();
       await render(); // refresca los cupos disponibles en las tarjetas
       mostrarAlerta(
-        `Reserva confirmada para <strong>${nombrePasajero}</strong> — vuelo ${reserva.codigoVuelo}, asiento ${reserva.asiento} (${CLASE_TEXTO[reserva.clase]}).`,
+        Reserva confirmada para <strong>${nombrePasajero}</strong> — vuelo ${reserva.codigoVuelo}, asiento ${reserva.asiento} (${CLASE_TEXTO[reserva.clase]}).,
         "success"
       );
     } catch (error) {
-      mostrarAlerta(`No se pudo reservar: ${error.message}`, "danger");
+      mostrarAlerta(No se pudo reservar: ${error.message}, "danger");
     }
   });
 
@@ -454,7 +486,7 @@ function inicializarVuelos() {
         listaReservas.appendChild(item);
       });
     } catch (error) {
-      listaReservas.innerHTML = `<li>No se pudo cargar el historial: ${error.message}</li>`;
+      listaReservas.innerHTML = <li>No se pudo cargar el historial: ${error.message}</li>;
     }
   }
 
@@ -462,12 +494,12 @@ function inicializarVuelos() {
     const boton = evento.target.closest("button[data-cancelar]");
     if (!boton) return;
     try {
-      await apiFetch(`/servicios/${boton.dataset.cancelar}`, { method: "DELETE", auth: true });
+      await apiFetch(/servicios/${boton.dataset.cancelar}, { method: "DELETE", auth: true });
       await actualizarInsigniaReservas();
       await renderModalReservas();
       await render();
     } catch (error) {
-      mostrarAlerta(`No se pudo cancelar la reserva: ${error.message}`, "danger");
+      mostrarAlerta(No se pudo cancelar la reserva: ${error.message}, "danger");
     }
   });
 
@@ -484,7 +516,7 @@ function inicializarVuelos() {
       await renderModalReservas();
       await render();
     } catch (error) {
-      mostrarAlerta(`No se pudieron cancelar las reservas: ${error.message}`, "danger");
+      mostrarAlerta(No se pudieron cancelar las reservas: ${error.message}, "danger");
     }
   });
 
