@@ -647,3 +647,26 @@ select:focus-visible,
     display: none;
   }
 }
+/* Corrección de visibilidad: botón de menú y campos de fecha/búsqueda */
+.navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.navbar-toggler-icon {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.form-control-aero,
+.form-select-aero,
+input[type="date"] {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.form-control-aero::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
